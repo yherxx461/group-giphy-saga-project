@@ -3,6 +3,7 @@ const app = express();
 const favoriteRouter = require('./routes/favorite.router');
 const categoryRouter = require('./routes/category.router');
 const PORT = process.env.PORT || 5001;
+require('dotenv').config();
 
 /** ---------- MIDDLEWARE ---------- **/
 app.use(express.json());
