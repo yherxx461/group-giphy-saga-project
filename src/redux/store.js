@@ -13,6 +13,41 @@ const giphy = (state = [], action) => {
   }
 };
 
+const favoritesList = (state = [], action) => {
+  switch (action.type) {
+    case 'SET_FAVORITES':
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+//favorites SAGA
+//Giphy SAGA
+function* favoritesSaga(action) {
+  //try catch block
+  try {
+    yield axios({
+      method: 'POST',
+      url: '/api/favorites',
+      data: action.payload,
+    });
+  } catch (error) {
+    console.log('error in POST favorites SAGA', error);
+  }
+}
+
+// // POST to add element
+// export function* postElementSaga(action) {
+//   // try catch block
+//   try {
+//     // POST a new element to server
+//     yield axios({
+//       method: 'POST',
+//       url: '/api/elements',
+//       data: action.payload,
+//     });
+
 //Giphy SAGA
 function* searchGiphySaga(action) {
   //try catch block
@@ -32,6 +67,7 @@ const sagaMiddleware = createSagaMiddleware();
 //registers sagas
 function* watcherSaga() {
   yield takeEvery('SEARCH_GIPHY', searchGiphySaga);
+  yield takeEvery('SET_FAVORITES', favoritesSaga);
 }
 
 // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
@@ -39,7 +75,7 @@ function* watcherSaga() {
 // configured to utilize redux-saga OR
 // redux logger!
 const store = createStore(
-  combineReducers({ giphy }),
+  combineReducers({ giphy, favoritesList }),
   applyMiddleware(sagaMiddleware, logger)
 );
 // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
